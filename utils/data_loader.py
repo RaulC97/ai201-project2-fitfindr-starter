@@ -77,7 +77,9 @@ if __name__ == "__main__":
     listings = load_listings()
     print(f"Loaded {len(listings)} listings.")
     print(f"First listing: {listings[0]['title']} — ${listings[0]['price']}")
+    print(f"First listing: {listings[0]}")
 
     wardrobe = get_example_wardrobe()
     print(f"\nExample wardrobe has {len(wardrobe['items'])} items.")
     print(f"First item: {wardrobe['items'][0]['name']}")
+    print(f"First item: {wardrobe['items'][0]}")
