@@ -134,16 +134,26 @@ For each tool, describe the specific failure mode you're handling and what the a
 
 Write out what a full user interaction looks like from start to finish — tool call by tool call. Use a specific example query.
 
+User write down a particular item their looking for. LLM calls the search_listing() to finding any matching clothes, then takes the first response and calls
+the suggest_outfit() with the new clothes and users wardrobe. After suggesting an outfit, LLM calls create_fit_card() that takes the suggestion and item and create 
+a caption that would fit a social media post, highlighting the new item.
+
 **Example user query:** "I'm looking for a vintage graphic tee under $30. I mostly wear baggy jeans and chunky sneakers. What's out there and how would I style it?"
 
 **Step 1:**
 <!-- What does the agent do first? Which tool is called? With what input? -->
+Call the serach_listing function that takes in a description, size, and max price. This will return the most fitting item from the listings data.
 
 **Step 2:**
 <!-- What happens next? What was returned from step 1? What tool is called now? -->
+Call the suggest_outfit function that takes in the most fitting item from search_listing, and the users wardrobe. Look at wardrobe_schema to look at how the data should
+be formatted.
 
 **Step 3:**
 <!-- Continue until the full interaction is complete -->
+After getting the suggestion, call the create_fit_card function with the suggestion, and the new item. This will create a caption for a social media post, highlighting the new
+item that was retrieved
 
 **Final output to user:**
 <!-- What does the user actually see at the end? -->
+In the end, the user will recieve a caption that highlights the new thrifted item the can post of social media.
