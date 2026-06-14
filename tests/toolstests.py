@@ -5,8 +5,12 @@ Manual tests for each FitFindr tool. Run this file directly to verify
 each tool works before wiring them into the agent loop.
 
 Usage:
-    python toolstests.py
+    python tests/toolstests.py
 """
+
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.data_loader import get_example_wardrobe, get_empty_wardrobe
 from tools import search_listings, suggest_outfit, create_fit_card
@@ -57,6 +61,19 @@ def test_search_listings_no_match():
     print(f"\nReturned {len(results)} result(s)")
     assert results == [], f"Expected [], got {results}"
     print("PASSED")
+
+
+def test_search_listings_impossible_query():
+    """Ballgown size XXS under $5 — confirms empty list without exception."""
+    divider("search_listings — designer ballgown, size XXS, max $5")
+    results = search_listings(
+        description="designer ballgown",
+        size="XXS",
+        max_price=5.0,
+    )
+    print(f"\nReturned {len(results)} result(s)")
+    assert results == [], f"Expected [], got {results}"
+    print("PASSED — empty list returned, no exception raised")
 
 
 def test_search_listings_price_only():
@@ -130,6 +147,16 @@ def test_create_fit_card_empty_outfit():
     print("\nPASSED")
 
 
+def test_create_fit_card_none_outfit():
+    """Should return a fun fallback caption when outfit is None — no exception."""
+    divider("create_fit_card — None outfit fallback")
+    result = create_fit_card(outfit=None, new_item=_NEW_ITEM)
+    print(f"\nCaption:\n  {result}")
+    assert isinstance(result, str), "Should return a string"
+    assert len(result) > 0, "Should not return an empty string"
+    print("\nPASSED")
+
+
 # ── Run all tests ─────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
@@ -137,6 +164,7 @@ if __name__ == "__main__":
     test_search_listings_normal()
     test_search_listings_no_size_no_price()
     test_search_listings_no_match()
+    test_search_listings_impossible_query()
     test_search_listings_price_only()
     print("\n" + "=" * 50)
     print("  All search_listings tests complete!")
@@ -152,6 +180,7 @@ if __name__ == "__main__":
     print("\nRunning create_fit_card tests...\n")
     test_create_fit_card_normal()
     test_create_fit_card_empty_outfit()
+    test_create_fit_card_none_outfit()
     print("\n" + "=" * 50)
     print("  All create_fit_card tests complete!")
     print("=" * 50 + "\n")
