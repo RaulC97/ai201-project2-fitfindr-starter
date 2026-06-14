@@ -213,6 +213,8 @@ With the help of Claude code, I was able to implement each of the tools, and tes
 
 **Milestone 4 — Planning loop and state management:**
 
+I was able to connect the back end LLM, tool passing to the front end Gradio. All the functionality was working, but some of the results for wrong, So I had to readjust how the serach_listings was getting the appropriate clothing item. When I searched for a big hat, it returned to me a shirt. I thought it was just getting what ever was the closes to the search but when looking for shades, it return no valid response. After fixing the issue, I believe it is now working properly. 
+
 ---
 
 ## A Complete Interaction (Step by Step)

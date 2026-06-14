@@ -95,20 +95,31 @@ def search_listings(
     keywords = {w for w in cleaned if w not in stop_words}
     print(f"[search_listings] Keywords extracted: {sorted(keywords)}")
 
-    # Score each listing by keyword overlap across title, description, style_tags, category
+    # Score each listing by weighted keyword overlap (title > tags > category > description)
     scored = []
     for listing in listings:
-        blob = " ".join([
-            listing.get("title", "").lower(),
-            listing.get("description", "").lower(),
-            " ".join(listing.get("style_tags", [])).lower(),
-            listing.get("category", "").lower(),
-        ])
-        score = sum(1 for kw in keywords if kw in blob)
+        title_blob = listing.get("title", "").lower()
+        tags_blob  = " ".join(listing.get("style_tags", [])).lower()
+        cat_blob   = listing.get("category", "").lower()
+        desc_blob  = listing.get("description", "").lower()
+
+        score = 0
+        for kw in keywords:
+            if kw in title_blob: score += 4
+            if kw in tags_blob:  score += 3
+            if kw in cat_blob:   score += 2
+            if kw in desc_blob:  score += 1
+
         if score > 0:
             scored.append((score, listing))
 
     scored.sort(key=lambda x: x[0], reverse=True)
+
+    # Drop results scoring below 30% of the top score (weak / unrelated matches)
+    if scored:
+        min_score = max(1, scored[0][0] * 0.3)
+        scored = [(s, l) for s, l in scored if s >= min_score]
+
     results = [listing for _, listing in scored]
 
     if results:
