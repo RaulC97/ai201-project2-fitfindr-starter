@@ -209,6 +209,8 @@ For this project, I am using Claude Code. For the input it will be to look at th
 
 **Milestone 3 — Individual tool implementations:**
 
+With the help of Claude code, I was able to implement each of the tools, and test out the outputs. There was some strange things that were happening, such as not getting data from listings for new clothing items, but I was able to resolve that after looking at my prompt and what the AI was doing.
+
 **Milestone 4 — Planning loop and state management:**
 
 ---
